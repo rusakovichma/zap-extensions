@@ -123,7 +123,9 @@ public class DomXssScanRuleUnitTest extends ActiveScannerTestUtils<DomXssScanRul
         assertAlertsRaised();
     }
 
-    /** Alerts raised are timing dependent, so any of these are good. */
+    /**
+     * Alerts raised are timing dependent, so any of these are good.
+     */
     private void assertAlertsRaised() {
         assertThat(alertsRaised.size(), equalTo(1));
         assertThat(alertsRaised.get(0).getEvidence(), equalTo(""));
@@ -138,7 +140,9 @@ public class DomXssScanRuleUnitTest extends ActiveScannerTestUtils<DomXssScanRul
         assertThat(alertsRaised.get(0).getConfidence(), equalTo(Alert.CONFIDENCE_MEDIUM));
     }
 
-    /** Test based on http://public-firing-range.appspot.com/address/location.hash/eval */
+    /**
+     * Test based on http://public-firing-range.appspot.com/address/location.hash/eval
+     */
     @ParameterizedTest
     @MethodSource("testBrowsers")
     public void shouldReportXssInLocationHashEval(String browser)
@@ -159,7 +163,9 @@ public class DomXssScanRuleUnitTest extends ActiveScannerTestUtils<DomXssScanRul
         assertAlertsRaised();
     }
 
-    /** Test based on http://public-firing-range.appspot.com/address/location.hash/replace */
+    /**
+     * Test based on http://public-firing-range.appspot.com/address/location.hash/replace
+     */
     @ParameterizedTest
     @MethodSource("testBrowsers")
     public void shouldReportXssInLocationHashReplace(String browser)
@@ -180,7 +186,9 @@ public class DomXssScanRuleUnitTest extends ActiveScannerTestUtils<DomXssScanRul
         assertAlertsRaised();
     }
 
-    /** Test based on http://public-firing-range.appspot.com/address/location.hash/setTimeout */
+    /**
+     * Test based on http://public-firing-range.appspot.com/address/location.hash/setTimeout
+     */
     @ParameterizedTest
     @MethodSource("testBrowsers")
     public void shouldReportXssInLocationHashSetTimeout(String browser)
@@ -201,7 +209,9 @@ public class DomXssScanRuleUnitTest extends ActiveScannerTestUtils<DomXssScanRul
         assertAlertsRaised();
     }
 
-    /** Test to trigger XSS after cancel button is clicked */
+    /**
+     * Test to trigger XSS after cancel button is clicked
+     */
     @ParameterizedTest
     @MethodSource("testBrowsers")
     public void shouldReportXssWhenCancelButtonIsClicked(String browser)
@@ -223,7 +233,9 @@ public class DomXssScanRuleUnitTest extends ActiveScannerTestUtils<DomXssScanRul
         assertAlertsRaised();
     }
 
-    /** Test based on http://public-firing-range.appspot.com/address/location.hash/function */
+    /**
+     * Test based on http://public-firing-range.appspot.com/address/location.hash/function
+     */
     @ParameterizedTest
     @MethodSource("testBrowsers")
     public void shouldReportXssInLocationHashFunction(String browser)
@@ -244,7 +256,9 @@ public class DomXssScanRuleUnitTest extends ActiveScannerTestUtils<DomXssScanRul
         assertAlertsRaised();
     }
 
-    /** Test based on http://public-firing-range.appspot.com/address/location.hash/jshref */
+    /**
+     * Test based on http://public-firing-range.appspot.com/address/location.hash/jshref
+     */
     @ParameterizedTest
     @MethodSource("testBrowsers")
     public void shouldReportXssInLocationHashInlineEvent(String browser)
@@ -265,7 +279,9 @@ public class DomXssScanRuleUnitTest extends ActiveScannerTestUtils<DomXssScanRul
         assertAlertsRaised();
     }
 
-    /** Test based on http://public-firing-range.appspot.com/address/location.hash/formaction */
+    /**
+     * Test based on http://public-firing-range.appspot.com/address/location.hash/formaction
+     */
     @ParameterizedTest
     @MethodSource("testBrowsers")
     public void shouldReportXssInLocationHashFormAction(String browser)

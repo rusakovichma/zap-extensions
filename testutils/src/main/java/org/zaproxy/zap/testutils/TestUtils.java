@@ -29,6 +29,7 @@ import static org.mockito.Mockito.withSettings;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileVisitResult;
@@ -46,6 +47,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.ResourceBundle;
+
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -84,7 +86,8 @@ public abstract class TestUtils {
      *
      * <p>Can be used for other temporary files/dirs.
      */
-    @TempDir protected static Path tempDir;
+    @TempDir
+    protected static Path tempDir;
 
     private static String zapInstallDir;
     private static String zapHomeDir;
@@ -190,7 +193,8 @@ public abstract class TestUtils {
      *
      * @see #mockMessages(Extension)
      */
-    protected void setUpMessages() {}
+    protected void setUpMessages() {
+    }
 
     /**
      * Deletes the ZAP's home directory.
@@ -237,8 +241,8 @@ public abstract class TestUtils {
      *
      * @param path the path component of the request-target, for example, {@code /dir/file.txt}.
      * @return the HTTP message, never {@code null}.
-     * @throws IllegalStateException if the server was not {@link #startServer() started} prior
-     *     calling this method.
+     * @throws IllegalStateException        if the server was not {@link #startServer() started} prior
+     *                                      calling this method.
      * @throws HttpMalformedHeaderException if an error occurred while creating the HTTP message.
      */
     protected HttpMessage getHttpMessage(String path) throws HttpMalformedHeaderException {
@@ -252,8 +256,8 @@ public abstract class TestUtils {
      *
      * @param path the path component of the request-target, for example, {@code /dir/file.txt}.
      * @return the HTTP message, never {@code null}.
-     * @throws IllegalStateException if the server was not {@link #startServer() started} prior
-     *     calling this method.
+     * @throws IllegalStateException        if the server was not {@link #startServer() started} prior
+     *                                      calling this method.
      * @throws HttpMalformedHeaderException if an error occurred while creating the HTTP message.
      */
     protected HttpMessage getHttpMessage(String path, String contentType)
@@ -264,28 +268,29 @@ public abstract class TestUtils {
     /**
      * Creates a HTTP message with the given data, for the {@link #nano test server}.
      *
-     * @param method the HTTP method.
-     * @param path the path component of the request-target, for example, {@code /dir/file.txt}.
+     * @param method       the HTTP method.
+     * @param path         the path component of the request-target, for example, {@code /dir/file.txt}.
      * @param responseBody the body of the response.
      * @return the HTTP message, never {@code null}.
-     * @throws IllegalStateException if the server was not {@link #startServer() started} prior
-     *     calling this method.
+     * @throws IllegalStateException        if the server was not {@link #startServer() started} prior
+     *                                      calling this method.
      * @throws HttpMalformedHeaderException if an error occurred while creating the HTTP message.
      */
     protected HttpMessage getHttpMessage(String method, String path, String responseBody)
             throws HttpMalformedHeaderException {
         return getHttpMessage(method, DEFAULT_CONTENT_TYPE, path, responseBody);
     }
+
     /**
      * Creates a HTTP message with the given data, for the {@link #nano test server}.
      *
-     * @param method the HTTP method.
-     * @param contentType the Content-Type header
-     * @param path the path component of the request-target, for example, {@code /dir/file.txt}.
+     * @param method       the HTTP method.
+     * @param contentType  the Content-Type header
+     * @param path         the path component of the request-target, for example, {@code /dir/file.txt}.
      * @param responseBody the body of the response.
      * @return the HTTP message, never {@code null}.
-     * @throws IllegalStateException if the server was not {@link #startServer() started} prior
-     *     calling this method.
+     * @throws IllegalStateException        if the server was not {@link #startServer() started} prior
+     *                                      calling this method.
      * @throws HttpMalformedHeaderException if an error occurred while creating the HTTP message.
      */
     protected HttpMessage getHttpMessage(
@@ -323,6 +328,59 @@ public abstract class TestUtils {
         return msg;
     }
 
+    public HttpMessage getHttpMessageUnauthorizedBasicAuth(String path, Map<String, String> params) throws HttpMalformedHeaderException {
+        return this.getHttpMessageUnauthorizedBasicAuth("GET", DEFAULT_CONTENT_TYPE, path, "<html></html>", params);
+    }
+
+    public HttpMessage getHttpMessageUnauthorizedBasicAuth(String path, String response, Map<String, String> params) throws HttpMalformedHeaderException {
+        return this.getHttpMessageUnauthorizedBasicAuth("GET", DEFAULT_CONTENT_TYPE, path, response, params);
+    }
+
+    protected HttpMessage getHttpMessageUnauthorizedBasicAuth(
+            String method, String contentType, String path, String responseBody, Map<String, String> params)
+            throws HttpMalformedHeaderException {
+        if (nano == null) {
+            throw new IllegalStateException("The HTTP test server was not started.");
+        }
+
+        HttpMessage msg = new HttpMessage();
+        StringBuilder reqHeaderSB = new StringBuilder();
+        reqHeaderSB.append(method);
+        reqHeaderSB.append(" http://localhost:");
+        reqHeaderSB.append(nano.getListeningPort());
+        reqHeaderSB.append(path);
+        reqHeaderSB.append(" HTTP/1.1\r\n");
+        reqHeaderSB.append("Host: localhost:").append(nano.getListeningPort()).append("\r\n");
+        reqHeaderSB.append("User-Agent: ZAP\r\n");
+        reqHeaderSB.append("Pragma: no-cache\r\n");
+        msg.setRequestHeader(reqHeaderSB.toString());
+
+        msg.setResponseBody(responseBody);
+
+        StringBuilder respHeaderSB = new StringBuilder();
+        respHeaderSB.append("HTTP/1.1 401 Unauthorized\r\n");
+        respHeaderSB.append("Server: Apache-Coyote/1.1\r\n");
+        respHeaderSB.append("Content-Type: ");
+        respHeaderSB.append(contentType);
+        respHeaderSB.append("\r\n");
+        respHeaderSB.append("Content-Length: ");
+        respHeaderSB.append(msg.getResponseBody().length());
+        respHeaderSB.append("\r\n");
+
+        if (params != null) {
+            for (Entry<String, String> paramsSet : params.entrySet()) {
+                respHeaderSB.append(String.format("%s: ", paramsSet.getKey()));
+                respHeaderSB.append(paramsSet.getValue());
+                respHeaderSB.append("\r\n");
+            }
+        }
+
+
+        msg.setResponseHeader(respHeaderSB.toString());
+
+        return msg;
+    }
+
     /**
      * Gets the contents of the file with the given path.
      *
@@ -338,7 +396,7 @@ public abstract class TestUtils {
      * Gets the contents of the file with the given path, replaced with the given parameters.
      *
      * @param resourcePath the path to the resource.
-     * @param params the parameters to replace in the contents, might be {@code null}.
+     * @param params       the parameters to replace in the contents, might be {@code null}.
      * @return the contents of the file.
      * @see #getResourcePath(String)
      */
@@ -354,7 +412,7 @@ public abstract class TestUtils {
      * Gets the contents of the file with the given path, replaced with the given parameters.
      *
      * @param resourcePath the path to the resource.
-     * @param params the parameters to replace in the contents, might be {@code null}.
+     * @param params       the parameters to replace in the contents, might be {@code null}.
      * @return the contents of the file.
      * @see #getResourcePath(String)
      */
@@ -479,7 +537,7 @@ public abstract class TestUtils {
      * <p>Resource messages that do not have the {@code prefix} have an empty {@code String}.
      *
      * @param baseName the base name of the resource bundle.
-     * @param prefix the prefix for the resource bundle.
+     * @param prefix   the prefix for the resource bundle.
      */
     protected static void mockMessages(String baseName, String prefix) {
         I18N i18n = mock(I18N.class, withSettings().lenient());
@@ -601,9 +659,9 @@ public abstract class TestUtils {
      * Creates a matcher that matches when the examined {@code Alert} has a other info that contains
      * the string loaded with the given key.
      *
-     * @param key the key for the name
-     * @return the name matcher
+     * @param key    the key for the name
      * @param params the parameters to format the message.
+     * @return the name matcher
      */
     protected static Matcher<Alert> containsOtherInfoLoadedWithKey(
             final String key, final Object... params) {

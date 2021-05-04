@@ -15,6 +15,7 @@ allprojects {
         mavenCentral()
     }
 
+
     spotless {
         kotlinGradle {
             ktlint()

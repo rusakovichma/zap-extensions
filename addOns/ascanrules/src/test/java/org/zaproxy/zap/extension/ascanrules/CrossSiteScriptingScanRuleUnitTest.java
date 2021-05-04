@@ -29,11 +29,15 @@ import static org.zaproxy.zap.extension.ascanrules.utils.Constants.NULL_BYTE_CHA
 
 import fi.iki.elonen.NanoHTTPD.IHTTPSession;
 import fi.iki.elonen.NanoHTTPD.Response;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.TreeSet;
+
 import org.junit.jupiter.api.Test;
 import org.parosproxy.paros.Constant;
 import org.parosproxy.paros.core.scanner.Alert;
@@ -68,7 +72,7 @@ public class CrossSiteScriptingScanRuleUnitTest
                             response =
                                     getHtml(
                                             "InputInParagraph.html",
-                                            new String[][] {{"name", name}});
+                                            new String[][]{{"name", name}});
                         } else {
                             response = getHtml("NoInput.html");
                         }
@@ -103,11 +107,11 @@ public class CrossSiteScriptingScanRuleUnitTest
                         String response;
                         if (name != null
                                 && (name.contains(NULL_BYTE_CHARACTER)
-                                        || name.equals(Constant.getEyeCatcher()))) {
+                                || name.equals(Constant.getEyeCatcher()))) {
                             response =
                                     getHtml(
                                             "InputInParagraph.html",
-                                            new String[][] {{"name", name}});
+                                            new String[][]{{"name", name}});
                         } else {
                             response = getHtml("NoInput.html");
                         }
@@ -154,7 +158,7 @@ public class CrossSiteScriptingScanRuleUnitTest
                             response =
                                     getHtml(
                                             "InputInParagraph.html",
-                                            new String[][] {{"name", name}});
+                                            new String[][]{{"name", name}});
                         } else {
                             response = getHtml("NoInput.html");
                         }
@@ -183,7 +187,7 @@ public class CrossSiteScriptingScanRuleUnitTest
                         String response;
                         if (name != null) {
                             response =
-                                    getHtml("InputInComment.html", new String[][] {{"name", name}});
+                                    getHtml("InputInComment.html", new String[][]{{"name", name}});
                         } else {
                             response = getHtml("NoInput.html");
                         }
@@ -218,9 +222,9 @@ public class CrossSiteScriptingScanRuleUnitTest
                         String response;
                         if (name != null
                                 && (name.contains(NULL_BYTE_CHARACTER)
-                                        || name.equals(Constant.getEyeCatcher()))) {
+                                || name.equals(Constant.getEyeCatcher()))) {
                             response =
-                                    getHtml("InputInComment.html", new String[][] {{"name", name}});
+                                    getHtml("InputInComment.html", new String[][]{{"name", name}});
                         } else {
                             response = getHtml("NoInput.html");
                         }
@@ -262,7 +266,7 @@ public class CrossSiteScriptingScanRuleUnitTest
                             // Strip out 'script' ignoring the case
                             name = name.replaceAll("(?i)script", "");
                             response =
-                                    getHtml("InputInComment.html", new String[][] {{"name", name}});
+                                    getHtml("InputInComment.html", new String[][]{{"name", name}});
                         } else {
                             response = getHtml("NoInput.html");
                         }
@@ -306,7 +310,7 @@ public class CrossSiteScriptingScanRuleUnitTest
                                             .replaceAll("&", "")
                                             .replaceAll("#", "");
                             response =
-                                    getHtml("InputInComment.html", new String[][] {{"name", name}});
+                                    getHtml("InputInComment.html", new String[][]{{"name", name}});
                         } else {
                             response = getHtml("NoInput.html");
                         }
@@ -334,7 +338,7 @@ public class CrossSiteScriptingScanRuleUnitTest
                         String name = getFirstParamValue(session, "name");
                         String response;
                         if (name != null) {
-                            response = getHtml("InputInBody.html", new String[][] {{"name", name}});
+                            response = getHtml("InputInBody.html", new String[][]{{"name", name}});
                         } else {
                             response = getHtml("NoInput.html");
                         }
@@ -369,8 +373,8 @@ public class CrossSiteScriptingScanRuleUnitTest
                         String response;
                         if (name != null
                                 && (name.contains(NULL_BYTE_CHARACTER)
-                                        || name.equals(Constant.getEyeCatcher()))) {
-                            response = getHtml("InputInBody.html", new String[][] {{"name", name}});
+                                || name.equals(Constant.getEyeCatcher()))) {
+                            response = getHtml("InputInBody.html", new String[][]{{"name", name}});
                         } else {
                             response = getHtml("NoInput.html");
                         }
@@ -407,7 +411,7 @@ public class CrossSiteScriptingScanRuleUnitTest
                         String name = getFirstParamValue(session, "name");
                         String response;
                         if (name != null) {
-                            response = getHtml("InputInSpan.html", new String[][] {{"name", name}});
+                            response = getHtml("InputInSpan.html", new String[][]{{"name", name}});
                         } else {
                             response = getHtml("NoInput.html");
                         }
@@ -446,8 +450,8 @@ public class CrossSiteScriptingScanRuleUnitTest
                         String response;
                         if (name != null
                                 && (name.contains(NULL_BYTE_CHARACTER)
-                                        || name.equals(Constant.getEyeCatcher()))) {
-                            response = getHtml("InputInSpan.html", new String[][] {{"name", name}});
+                                || name.equals(Constant.getEyeCatcher()))) {
+                            response = getHtml("InputInSpan.html", new String[][]{{"name", name}});
                         } else {
                             response = getHtml("NoInput.html");
                         }
@@ -483,7 +487,7 @@ public class CrossSiteScriptingScanRuleUnitTest
                         String name = getFirstParamValue(session, "name");
                         String response;
                         if (name != null) {
-                            response = getHtml("InputIsBody.html", new String[][] {{"name", name}});
+                            response = getHtml("InputIsBody.html", new String[][]{{"name", name}});
                         } else {
                             response = getHtml("NoInput.html");
                         }
@@ -519,7 +523,7 @@ public class CrossSiteScriptingScanRuleUnitTest
                             response =
                                     getHtml(
                                             "InputOutsideHtmlTag.html",
-                                            new String[][] {{"name", name}});
+                                            new String[][]{{"name", name}});
                         } else {
                             response = getHtml("NoInput.html");
                         }
@@ -554,11 +558,11 @@ public class CrossSiteScriptingScanRuleUnitTest
                         String response;
                         if (name != null
                                 && (name.contains(NULL_BYTE_CHARACTER)
-                                        || name.equals(Constant.getEyeCatcher()))) {
+                                || name.equals(Constant.getEyeCatcher()))) {
                             response =
                                     getHtml(
                                             "InputOutsideHtmlTag.html",
-                                            new String[][] {{"name", name}});
+                                            new String[][]{{"name", name}});
                         } else {
                             response = getHtml("NoInput.html");
                         }
@@ -594,7 +598,7 @@ public class CrossSiteScriptingScanRuleUnitTest
                         if (name != null) {
                             // Strip out 'script' ignoring the case
                             name = name.replaceAll("(?i)script", "");
-                            response = getHtml("InputInBody.html", new String[][] {{"name", name}});
+                            response = getHtml("InputInBody.html", new String[][]{{"name", name}});
                         } else {
                             response = getHtml("NoInput.html");
                         }
@@ -633,7 +637,7 @@ public class CrossSiteScriptingScanRuleUnitTest
                                             .replaceAll(">", "")
                                             .replaceAll("&", "")
                                             .replaceAll("#", "");
-                            response = getHtml("InputInBody.html", new String[][] {{"name", name}});
+                            response = getHtml("InputInBody.html", new String[][]{{"name", name}});
                         } else {
                             response = getHtml("NoInput.html");
                         }
@@ -666,7 +670,7 @@ public class CrossSiteScriptingScanRuleUnitTest
                             response =
                                     getHtml(
                                             "InputInAttribute.html",
-                                            new String[][] {{"color", color}});
+                                            new String[][]{{"color", color}});
                         } else {
                             response = getHtml("NoInput.html");
                         }
@@ -709,7 +713,7 @@ public class CrossSiteScriptingScanRuleUnitTest
                             response =
                                     getHtml(
                                             "InputInAttribute.html",
-                                            new String[][] {{"color", color}});
+                                            new String[][]{{"color", color}});
                         } else {
                             response = getHtml("NoInput.html");
                         }
@@ -742,7 +746,7 @@ public class CrossSiteScriptingScanRuleUnitTest
                             response =
                                     getHtml(
                                             "InputInAttributeScriptTag.html",
-                                            new String[][] {{"color", color}});
+                                            new String[][]{{"color", color}});
                         } else {
                             response = getHtml("NoInput.html");
                         }
@@ -780,7 +784,7 @@ public class CrossSiteScriptingScanRuleUnitTest
                             response =
                                     getHtml(
                                             "InputInFrameSrcTag.html",
-                                            new String[][] {{"name", name}});
+                                            new String[][]{{"name", name}});
                         } else {
                             response = getHtml("NoInput.html");
                         }
@@ -818,7 +822,7 @@ public class CrossSiteScriptingScanRuleUnitTest
                             response =
                                     getHtml(
                                             "InputInScriptIdTag.html",
-                                            new String[][] {{"name", name}});
+                                            new String[][]{{"name", name}});
                         } else {
                             response = getHtml("NoInput.html");
                         }
@@ -854,7 +858,7 @@ public class CrossSiteScriptingScanRuleUnitTest
                                 url +=
                                         "?"
                                                 + URLDecoder.decode(
-                                                        session.getQueryParameterString(), "UTF-8");
+                                                session.getQueryParameterString(), "UTF-8");
                             } catch (UnsupportedEncodingException e) {
                                 // At least this might be noticed
                                 e.printStackTrace();
@@ -862,7 +866,7 @@ public class CrossSiteScriptingScanRuleUnitTest
                         }
 
                         String response =
-                                getHtml("ReflectedUrl.html", new String[][] {{"url", url}});
+                                getHtml("ReflectedUrl.html", new String[][]{{"url", url}});
                         return newFixedLengthResponse(response);
                     }
                 };
@@ -901,7 +905,7 @@ public class CrossSiteScriptingScanRuleUnitTest
                                 url +=
                                         "?"
                                                 + URLDecoder.decode(
-                                                        session.getQueryParameterString(), "UTF-8");
+                                                session.getQueryParameterString(), "UTF-8");
                             } catch (UnsupportedEncodingException e) {
                                 // At least this might be noticed
                                 e.printStackTrace();
@@ -909,7 +913,7 @@ public class CrossSiteScriptingScanRuleUnitTest
                         }
 
                         String response =
-                                getHtml("ReflectedUrl.html", new String[][] {{"url", url}});
+                                getHtml("ReflectedUrl.html", new String[][]{{"url", url}});
                         return newFixedLengthResponse(response);
                     }
                 };
@@ -943,7 +947,7 @@ public class CrossSiteScriptingScanRuleUnitTest
                                 url +=
                                         "?"
                                                 + URLDecoder.decode(
-                                                        session.getQueryParameterString(), "UTF-8");
+                                                session.getQueryParameterString(), "UTF-8");
                             } catch (UnsupportedEncodingException e) {
                                 // At least this might be noticed
                                 e.printStackTrace();
@@ -951,7 +955,7 @@ public class CrossSiteScriptingScanRuleUnitTest
                         }
 
                         String response =
-                                getHtml("ReflectedUrl.html", new String[][] {{"url", url}});
+                                getHtml("ReflectedUrl.html", new String[][]{{"url", url}});
                         return newFixedLengthResponse(response);
                     }
                 };
@@ -981,7 +985,7 @@ public class CrossSiteScriptingScanRuleUnitTest
                         String name = getFirstParamValue(session, "name");
                         String response;
                         if (name != null) {
-                            response = getHtml("example.json", new String[][] {{"name", name}});
+                            response = getHtml("example.json", new String[][]{{"name", name}});
                         } else {
                             response = getHtml("example.json");
                         }
@@ -1018,7 +1022,7 @@ public class CrossSiteScriptingScanRuleUnitTest
                             // Strip out 'script' ignoring the case
                             name = name.replaceAll("(?i)script", "");
                             response =
-                                    getHtml("InputInsideDiv.html", new String[][] {{"name", name}});
+                                    getHtml("InputInsideDiv.html", new String[][]{{"name", name}});
                         } else {
                             response = getHtml("NoInput.html");
                         }
@@ -1063,7 +1067,7 @@ public class CrossSiteScriptingScanRuleUnitTest
                             } catch (UnsupportedEncodingException e) {
                                 // Ignore
                             }
-                            response = getHtml("InputInBody.html", new String[][] {{"name", name}});
+                            response = getHtml("InputInBody.html", new String[][]{{"name", name}});
                         } else {
                             response = getHtml("NoInput.html");
                         }
@@ -1109,7 +1113,7 @@ public class CrossSiteScriptingScanRuleUnitTest
                             } catch (UnsupportedEncodingException e) {
                                 // Ignore
                             }
-                            response = getHtml("InputInBody.html", new String[][] {{"name", name}});
+                            response = getHtml("InputInBody.html", new String[][]{{"name", name}});
                         } else {
                             response = getHtml("NoInput.html");
                         }
@@ -1150,7 +1154,7 @@ public class CrossSiteScriptingScanRuleUnitTest
                             } catch (UnsupportedEncodingException e) {
                                 // Ignore
                             }
-                            response = getHtml("InputInBody.html", new String[][] {{"name", name}});
+                            response = getHtml("InputInBody.html", new String[][]{{"name", name}});
                         } else {
                             response = getHtml("NoInput.html");
                         }
@@ -1197,7 +1201,7 @@ public class CrossSiteScriptingScanRuleUnitTest
                         if (name != null) {
                             name = name.replaceAll("\"", "&quot;");
                             response =
-                                    getHtml("InputInScript.html", new String[][] {{"name", name}});
+                                    getHtml("InputInScript.html", new String[][]{{"name", name}});
                         } else {
                             response = getHtml("NoInput.html");
                         }
@@ -1228,7 +1232,7 @@ public class CrossSiteScriptingScanRuleUnitTest
                         String response;
                         if (name != null) {
                             response =
-                                    getHtml("MultipleInput.html", new String[][] {{"name", name}});
+                                    getHtml("MultipleInput.html", new String[][]{{"name", name}});
                         } else {
                             response = getHtml("NoInput.html");
                         }

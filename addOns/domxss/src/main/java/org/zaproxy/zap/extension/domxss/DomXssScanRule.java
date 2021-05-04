@@ -110,7 +110,7 @@ public class DomXssScanRule extends AbstractAppParamPlugin {
     private static ProxyServer proxy = null;
     private static int proxyPort = -1;
 
-    private WebDriverWrapper driver;
+    protected WebDriverWrapper driver;
     private boolean vulnerable = false;
     private Browser browser;
 
@@ -240,7 +240,7 @@ public class DomXssScanRule extends AbstractAppParamPlugin {
     }
 
     private WebDriver createWebDriver() {
-        WebDriver driver = ExtensionSelenium.getWebDriver(browser, "127.0.0.1", proxyPort);
+        WebDriver driver = ExtensionSelenium.getWebDriver(browser, "localhost", 8085);
 
         driver.manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS);
         driver.manage().timeouts().setScriptTimeout(10, TimeUnit.SECONDS);
