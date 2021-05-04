@@ -58,7 +58,7 @@ public class DomXssScanRuleIntegrationTest extends ActiveScannerTestUtils<DomXss
     public void testSwaggerUiDomXss(String browser)
             throws Exception {
 
-        HttpMessage msg = new HttpMessage(new URI("https://ext-perf.delivery.epam.com/swagger-ui.html"));
+        HttpMessage msg = new HttpMessage(new URI("https://some-site/swagger-ui.html"));
 
         this.rule.getConfig().setProperty("rules.domxss.browserid", Browser.FIREFOX_HEADLESS.getId());
         this.rule.init(msg, this.parent);
